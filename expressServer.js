@@ -3,10 +3,18 @@ const server = express();
 const path = require("path");
 const { static } = require("express");
 const { fstat } = require("fs");
+const fs = require('fs');
+const bodyParser = require('body-parser')
 const PORT = 8080;
 
 // use, get, post, delete
 // need to fs.writefile to db.json
+
+// Stack overflow has good explanation of why this is needed: https://stackoverflow.com/questions/39870867/what-does-app-usebodyparser-json-do
+// parse application/x-www-form-urlencoded
+server.use(bodyParser.urlencoded({ extended: false }))
+// parse application/json
+server.use(bodyParser.json())
 
 
 server.listen((PORT), () => {
@@ -40,11 +48,43 @@ server.get("/api/notes", (req, res) => {
 
 // Post notes to db
 server.post("/api/notes", (req, res) => {
-    res.sendFile(path.join(__dirname + "/db/db.json"));
-})
+    console.log(req.body);
+    res.status(200).json({ message: "Hello?" });
+
+    // Need to read db.json file in order to alter it
+    fs.readFile(__dirname + '/db/db.json', 'utf-8', function (err, data) {
+        if (err) {
+            throw err;
+        } else {
+            // creates variable to parse string back to object
+            let file = JSON.parse(data);
+            // creates object variable to grab title and text from req.body
+            let newObj = {
+                title: req.body.title,
+                text: req.body.text
+            };
+            // push newly created note (newObj) to file
+            file.push(newObj);
+
+
+            // overwrite db.json with newly created note
+            fs.writeFile(__dirname + '/db/db.json', file, function (err) {
+                if (err) {
+                    throw err;
+                } else {
+                    // send status and message to web client to show success
+                    res.status(200).json({ message: "You just wrote a new note. Congratulations!" });
+                }
+            });
+        }
+    })
+});
+
+
+
 
 // Delete notes from db
-server.delete("/api/notes", (req, res) => {
+server.delete("/api/notes/:id", (req, res) => {
     res.sendFile(path.join(__dirname + "/db/db.json"));
 })
 
