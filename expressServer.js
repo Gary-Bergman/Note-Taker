@@ -5,14 +5,19 @@ const { static } = require("express");
 const { fstat } = require("fs");
 const fs = require('fs');
 const bodyParser = require('body-parser')
-const PORT = 8080;
+var morgan = require('morgan')
+const PORT = process.env.PORT || 8080;
+
+server.use(morgan('combined'));
+
+var dbTracker = [];
 
 // use, get, post, delete
 // need to fs.writefile to db.json
 
 // Stack overflow has good explanation of why this is needed: https://stackoverflow.com/questions/39870867/what-does-app-usebodyparser-json-do
 // parse application/x-www-form-urlencoded
-server.use(bodyParser.urlencoded({ extended: false }))
+server.use(bodyParser.urlencoded({ extended: true }))
 // parse application/json
 server.use(bodyParser.json())
 
@@ -43,13 +48,29 @@ server.get("/notes", (req, res) => {
 
 // Get notes from db 
 server.get("/api/notes", (req, res) => {
-    res.sendFile(path.join(__dirname + "/db/db.json"));
+    fs.readFile(__dirname + '/db/db.json', 'utf-8', function (err, data) {
+        if (err) {
+            throw err;
+        } else {
+            // creates variable to parse string back to object
+            let file = JSON.parse(data);
+            // creates object variable to grab title and text from req.body
+            dbTracker = [].concat(file);
+            res.json(file);
+        }
+    })
+})
+
+// Always keep this as the very last GET
+// Anything other than notes or api/notes will go to homepage
+server.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname + "/public/index.html"));
 })
 
 // Post notes to db
 server.post("/api/notes", (req, res) => {
     console.log(req.body);
-    res.status(200).json({ message: "Hello?" });
+    // res.status(200).json({ message: "Hello?" });
 
     // Need to read db.json file in order to alter it
     fs.readFile(__dirname + '/db/db.json', 'utf-8', function (err, data) {
@@ -65,10 +86,11 @@ server.post("/api/notes", (req, res) => {
             };
             // push newly created note (newObj) to file
             file.push(newObj);
+            dbTracker = file;
 
 
             // overwrite db.json with newly created note
-            fs.writeFile(__dirname + '/db/db.json', file, function (err) {
+            fs.writeFile(__dirname + '/db/db.json', JSON.stringify(file), function (err) {
                 if (err) {
                     throw err;
                 } else {
