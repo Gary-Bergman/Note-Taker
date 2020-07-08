@@ -1,7 +1,7 @@
 # Note Taker
 
 
-   ## Demo/Link
+   ## Demo
   
 
   ![Note Taker gif](public/assets/images/noteTaker.gif)
@@ -9,7 +9,8 @@
   
   [MP4 Demo](https://drive.google.com/file/d/1f6CsMN9EPFRh6BCYsddIz8A-U4v96sqD/view?usp=sharing)
 
-  [Deployed Link]()
+
+  [Deployed Link](https://note-taker-great.herokuapp.com/)
 
 
   ## Description
@@ -21,7 +22,7 @@
 
   ## Table of Contents
 
-  *  [Demo](#Demo/Link)
+  *  [Demo](#Demo)
 
   *  [Installation](#Installation)
 
@@ -44,7 +45,7 @@
 
   ## Usage
 
-  Run the application using the command `node expressServer.js` in the CLI then go to a browser window and enter `localhost:8080/` to view the home page. Click the `Get Started` button to navigate to the notes page. You can add a note by typing text into the `Note Title` and `Note Text` areas. Click the save icon to save that note. Click the trashcan icon to delete any of your previously saved notes.
+  Run the application using the command `node expressServer.js` or `nmp start` in the CLI then go to a browser window and enter `localhost:8080/` to view the home page. Click the `Get Started` button to navigate to the notes page. You can add a note by typing text into the `Note Title` and `Note Text` areas. Click the save icon to save that note. Click the trashcan icon to delete any of your previously saved notes.
 
 
   ## License
