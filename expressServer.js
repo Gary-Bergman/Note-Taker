@@ -5,7 +5,7 @@ const express = require("express");
 const path = require("path");
 const fs = require('fs');
 const bodyParser = require('body-parser')
-var morgan = require('morgan')
+// var morgan = require('morgan')
 
 // Sets up the Express App
 // =============================================================
@@ -13,7 +13,7 @@ const server = express();
 const PORT = process.env.PORT || 8080;
 
 // Sets morgan which feeds data to the terminal for developers' sake
-server.use(morgan('combined'));
+// server.use(morgan('combined'));
 
 // Sets up the Express app to handle data parsing
 // Stack overflow has good explanation of why this is needed: 
