@@ -5,6 +5,7 @@ const express = require("express");
 const path = require("path");
 const fs = require('fs');
 const bodyParser = require('body-parser')
+// commented out logger morgan bc as a dev-dependency it couldn't deploy to heroku. Could also keep it as a regular dependency instead
 // var morgan = require('morgan')
 
 // Sets up the Express App
@@ -12,6 +13,7 @@ const bodyParser = require('body-parser')
 const server = express();
 const PORT = process.env.PORT || 8080;
 
+// commented out logger morgan bc as a dev-dependency it couldn't deploy to heroku. Could also keep it as a regular dependency instead
 // Sets morgan which feeds data to the terminal for developers' sake
 // server.use(morgan('combined'));
 
